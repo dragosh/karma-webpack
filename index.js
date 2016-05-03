@@ -153,7 +153,12 @@ Plugin.prototype.readFile = function(file, callback) {
 				callback(null, Buffer.concat(contents));
 			});
 		} else {
-			middleware.fileSystem.readFile("/_karma_webpack_/" + file.replace(/\\/g, "/"), callback);
+			if (process.platform === 'win32') {
+		        var kwFile = path.join('', file).replace(/\\/g, "/");
+			     middleware.fileSystem.readFile(kwFile, callback);
+		    } else {
+		        middleware.fileSystem.readFile("/_karma_webpack_/" + file.replace(/\\/g, "/"), callback);
+		    }
 		}
 	}
 	if(!this.waiting)
